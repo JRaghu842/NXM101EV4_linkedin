@@ -1,19 +1,22 @@
 let express = require("express");
 require("dotenv").config();
-let cors = require("cors");
 
 let { connection } = require("./db");
 const { auth } = require("./middleware/auth.middleware");
 const { postRouter } = require("./routes/post.routes");
 const { userRouter } = require("./routes/user.routes");
-let app = express();
+const { logoutRouter } = require("./routes/logout.routes");
+const { newtokenRouter } = require("./routes/newtoken.routes");
 
+let app = express();
 app.use(express.json());
-app.use(cors());
 
 app.use("/users", userRouter);
+app.use("/getnewtoken", newtokenRouter);
+
 app.use(auth);
 app.use("/posts", postRouter);
+app.use("/logout", logoutRouter);
 
 app.listen(process.env.port, async () => {
   try {

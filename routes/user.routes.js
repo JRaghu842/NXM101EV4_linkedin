@@ -36,10 +36,13 @@ userRouter.post("/login", async (req, res) => {
         if (result) {
           res.status(200).send({
             msg: "Login is successful",
-            token: jwt.sign({ userID: user[0]._id }, "code"),
+            token: jwt.sign({ userID: user[0]._id }, "code", { expiresIn: 60 }),
+            refreshtoken: jwt.sign({ userID: user[0]._id }, "refreshcode", {
+              expiresIn: 180,
+            }),
           });
         } else {
-          res.status(400).send({ msg: "Wrong password" });
+          res.status(400).send({ msg: err });
         }
       });
     } else {
